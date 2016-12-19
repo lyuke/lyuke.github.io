@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Loker">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.0.0" />
+
+
+
+<link rel="canonical" href="http://yoursite.com/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.0" />
+
+
+
+  
+
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-72809584-1', 'auto');
+        ga('send', 'pageview');
+  </script>
+
+
+
+    <title> Loker </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Loker</a>
+</div>
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Loker</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts">
+    
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <a class="post-link" href="/2016/12/19/rxjs/">RxJS 入门</a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Dec 19, 2016
+        </span>
+      </div>
+    </header>
+
+    
+
+    <div class="post-content">
+      
+        
+          
+        
+
+        
+          <h1 id="RxJS-介绍"><a href="#RxJS-介绍" class="headerlink" title="RxJS 介绍"></a>RxJS 介绍</h1><p>RxJS 是一个通过使用observable序列来组合异步和时间驱动程序的库。它提供了一个核心类型，<strong>Observable</strong>, 还有其他类型(Observer, Schedulers, Subjects)，和类似Array中的<br>操作符, 如(map, filtr, resuce, every, etc)，通过这些来像处理集合一样来处理异步时间。</p>
+<blockquote>
+<p>Think of RxJS as Lodash for events(可以认为RxJS是时间处理中的lodash)</p>
+</blockquote>
+<p>ReactiveX 结合了观察者模式和迭代器模式和集合的函数式编程来满足管理序列化时间的理想方式。</p>
+<p>在RxJS中的重要概念主要有：</p>
+<ol>
+<li><strong>Observable</strong>: 代表了一种异步的值或事件的可调用的集合</li>
+<li><strong>Observer</strong>: 是一个知道如何监听通过Observable传递值的回调函数集合</li>
+<li><strong>Subscription</strong>: 代表了Observable和执行, 主要用来取消Observable的执行</li>
+<li><strong>Operators</strong>: 是一种纯函数，使得能够用像map，filter，concat，flatmap等函数操作符来处理集合</li>
+<li><strong>Subject</strong>: 和EventEmitter相同，而且是唯一的方式能够像多个Observer广播值或事件</li>
+<li><strong>Schedulers</strong>: 是用于控制并发的集中调度器， 并允许我们来协调计算比如在使用setTimeout或者requestAnimationFrame时</li>
+</ol>
+<h2 id="第一个例子"><a href="#第一个例子" class="headerlink" title="第一个例子"></a>第一个例子</h2><p>通常我们这样注册事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var button = document.querySelector(&apos;button&apos;);</div><div class="line">button.addEventListener(&apos;click&apos;, () =&gt; console.log(&apos;Clicked!&apos;));</div></pre></td></tr></table></figure>
+<p>如果使用RxJS的话我们可以这么写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var button = document.querySelector(&apos;button&apos;);</div><div class="line">Rx.Observable.fromEvent(button, &apos;click&apos;)</div><div class="line">    .subscribe(() =&gt;console.log(&apos;Clicked!&apos;));</div></pre></td></tr></table></figure>
+          <div class="read-more">
+            <a href="/2016/12/19/rxjs/" class="read-more-link">Read more..</a>
+          </div>
+        
+      
+    </div>
+
+    
+  </article>
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    
+    
+  </nav>
+
+
+          </div>
+          
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:lk11nju@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/lyuke" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2016
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">lyuke</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+
+
+  <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.0.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.0.0"></script>
+
+  </body>
+</html>
