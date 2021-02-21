@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="RxJS," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Loker's blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="RxJS 介绍RxJS 是一个通过使用observable序列来组合异步和时间驱动程序的库。它提供了一个核心类型，Observable, 还有其他类型(Observer, Schedulers, Subjects)，和类似Array中的操作符, 如(map, filtr, resuce, every, etc)，通过这些来像处理集合一样来处理异步时间。  Think of RxJS as Loda">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJS 入门">
+<meta property="og:url" content="http://example.com/2016/12/19/rxjs/index.html">
+<meta property="og:site_name" content="Loker&#39;s blog">
+<meta property="og:description" content="RxJS 介绍RxJS 是一个通过使用observable序列来组合异步和时间驱动程序的库。它提供了一个核心类型，Observable, 还有其他类型(Observer, Schedulers, Subjects)，和类似Array中的操作符, 如(map, filtr, resuce, every, etc)，通过这些来像处理集合一样来处理异步时间。  Think of RxJS as Loda">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-12-19T12:01:24.000Z">
+<meta property="article:modified_time" content="2021-02-19T11:59:44.150Z">
+<meta property="article:author" content="Loker">
+<meta property="article:tag" content="RxJS">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lyuke'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2016/12/19/rxjs/"/>
+
+
+
+
+
+  <title>RxJS 入门 | Loker's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Loker's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2016/12/19/rxjs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Loker's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RxJS 入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-19T20:01:24+08:00">
+                2016-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="RxJS-介绍"><a href="#RxJS-介绍" class="headerlink" title="RxJS 介绍"></a>RxJS 介绍</h1><p>RxJS 是一个通过使用observable序列来组合异步和时间驱动程序的库。它提供了一个核心类型，<strong>Observable</strong>, 还有其他类型(Observer, Schedulers, Subjects)，和类似Array中的<br>操作符, 如(map, filtr, resuce, every, etc)，通过这些来像处理集合一样来处理异步时间。</p>
+<blockquote>
+<p>Think of RxJS as Lodash for events(可以认为RxJS是时间处理中的lodash)</p>
+</blockquote>
+<p>ReactiveX 结合了观察者模式和迭代器模式和集合的函数式编程来满足管理序列化时间的理想方式。</p>
+<p>在RxJS中的重要概念主要有：</p>
+<ol>
+<li><strong>Observable</strong>: 代表了一种异步的值或事件的可调用的集合</li>
+<li><strong>Observer</strong>: 是一个知道如何监听通过Observable传递值的回调函数集合</li>
+<li><strong>Subscription</strong>: 代表了Observable和执行, 主要用来取消Observable的执行</li>
+<li><strong>Operators</strong>: 是一种纯函数，使得能够用像map，filter，concat，flatmap等函数操作符来处理集合</li>
+<li><strong>Subject</strong>: 和EventEmitter相同，而且是唯一的方式能够像多个Observer广播值或事件</li>
+<li><strong>Schedulers</strong>: 是用于控制并发的集中调度器， 并允许我们来协调计算比如在使用setTimeout或者requestAnimationFrame时</li>
+</ol>
+<h2 id="第一个例子"><a href="#第一个例子" class="headerlink" title="第一个例子"></a>第一个例子</h2><p>通常我们这样注册事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">button.addEventListener(&#39;click&#39;, () &#x3D;&gt; console.log(&#39;Clicked!&#39;));</span><br></pre></td></tr></table></figure>
+<p>如果使用RxJS的话我们可以这么写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">Rx.Observable.fromEvent(button, &#39;click&#39;)</span><br><span class="line">    .subscribe(() &#x3D;&gt;console.log(&#39;Clicked!&#39;));</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h3><p>RxJS采用纯函数来产出数据，这意味着有更少的代码错误。</p>
+<p>通常你会创造一个不纯的函数来扰乱你的状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 0;</span><br><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">button.addEventListener(&#39;click&#39;, () &#x3D;&gt; console.log(&#96;Clicked! $&#123;++count&#125; times&#96;));</span><br></pre></td></tr></table></figure>
+<p>在RxJS中你可以隔离状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">Rx.Observable.fromEvent(button, &#39;click&#39;)</span><br><span class="line">    .scan(count &#x3D;&gt; count+1,0)</span><br><span class="line">    .subscribe(count &#x3D;&gt;console.log(&#96;Clicked $&#123;count&#125; times!&#96;));</span><br></pre></td></tr></table></figure>
+<p>scan操作符就像是array的reduce操作。</p>
+<h3 id="事件流"><a href="#事件流" class="headerlink" title="事件流"></a>事件流</h3><p>RxJS 有许多操作符来帮助你控制observables中的事件流</p>
+<p>如果用纯JS来控制一个按钮在1s内只能按一次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 0;</span><br><span class="line">var rate &#x3D; 1000;</span><br><span class="line">var lastClick &#x3D; Date.now() - rate;</span><br><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">button.addEventListener(&#39;click&#39;, () &#x3D;&gt; &#123;</span><br><span class="line">    if(Date.now() - lastClick &gt;&#x3D; rate)&#123;</span><br><span class="line">        console.log(&#96;Clicked $&#123;++count&#125; times&#96;);</span><br><span class="line">        lastClick &#x3D; Date.now();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>而是使用RxJS的话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">Rx.Observable.fromEvent(button,&#39;click&#39;)</span><br><span class="line">    .throttleTime(1000)</span><br><span class="line">    .scan(count &#x3D;&gt; count+1， 0)</span><br><span class="line">    .subscribe(count &#x3D;&gt; console.log(&#96;Clicked $&#123;count&#125; time&#96;));</span><br></pre></td></tr></table></figure>
+<h3 id="流式传值"><a href="#流式传值" class="headerlink" title="流式传值"></a>流式传值</h3><p>你能够通过observables来传递值<br>下面是一个可以通过纯JS来为每一次点击添加鼠标的X坐标</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var count &#x3D; 0;</span><br><span class="line">var rate &#x3D; 1000;</span><br><span class="line">var lastClick &#x3D; Date.now() - rate;</span><br><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">button.addEventListener(&#39;click&#39;, () &#x3D;&gt; &#123;</span><br><span class="line">    if(Date.now() - lastClick &gt;&#x3D; rate)&#123;</span><br><span class="line">        console.log(++count + event.clientX);</span><br><span class="line">        lastClick &#x3D; Date.now();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>使用RxJS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var button &#x3D; document.querySelector(&#39;button&#39;);</span><br><span class="line">Rx.Observable.fromEvent(button,&#39;click&#39;)</span><br><span class="line">    .throttleTime(1000)</span><br><span class="line">    .map(event &#x3D;&gt; event.clientX)</span><br><span class="line">    .scan((count, clientX) &#x3D;&gt; count+clientX, 0)</span><br><span class="line">    .subscribe(count &#x3D;&gt; console.log(count));</span><br></pre></td></tr></table></figure>
+<h1 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h1><p>Observables是一种懒加载能够提供多值的集合<br>可以看下面的表</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">Single</th>
+<th align="center">Multiple</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Pull</td>
+<td align="center">Function</td>
+<td align="center">Itetator</td>
+</tr>
+<tr>
+<td align="left">Push</td>
+<td align="center">Promise</td>
+<td align="center">Observable</td>
+</tr>
+</tbody></table>
+<p>下面的这个例子是一个Observable 在被订阅的时候立刻输出1，2，3 然后在订阅后1s后输出4，然后结束。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var observable &#x3D; Rx.Observable.create(function (observer) &#123;</span><br><span class="line">    observer.next(1);</span><br><span class="line">    observer.next(2);</span><br><span class="line">    observer.next(3);</span><br><span class="line">    setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">        observer.next(4);</span><br><span class="line">        observer.complete();</span><br><span class="line">    &#125;,1000);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>为了调用Observable 我们需要订阅它:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">console.log(&#39;just before subscribe&#39;);</span><br><span class="line">observable.subscribe(&#123;</span><br><span class="line">    next: x &#x3D;&gt; console.log(&#39;got value&#39;+ x),</span><br><span class="line">    error: err &#x3D;&gt; console.error(&#39;something wrong occurred:&#39; + err),</span><br><span class="line">    complete: () &#x3D;&gt; consoelg.log(&#39;done&#39;);</span><br><span class="line">&#125;);</span><br><span class="line">console.log(&#39;just after subscribe&#39;);</span><br></pre></td></tr></table></figure>
+<p>这个执行结果会是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">just before subscribe</span><br><span class="line">got value 1</span><br><span class="line">got value 2</span><br><span class="line">got value 3</span><br><span class="line">just after subscribe</span><br><span class="line">got value 4</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<h2 id="Pull-vs-Push"><a href="#Pull-vs-Push" class="headerlink" title="Pull vs Push"></a>Pull vs Push</h2><p>Pull和Push是两种不同的协议用于在数据生产者和数据消费者之间。<br><strong>什么是Pull?</strong> 在Pull系统中由消费者来决定何时来获取数据，每一个jS函数都是一个Pull系统，函数是一个数据生产者，通过调用函数来获取数据。<br><strong>什么是Push?</strong> 在Push系统中，由数据生产者来决定什么时候来向消费者提供数据。Promises 是现在JavaScript中最普遍的Push系统。<br>RxJS引入了Observable，一种新的push系统，一个Observable是一种多个值的生产者，向Observers(消费者)推送数据。</p>
+<h2 id="Observable-和一般化的函数进行比较"><a href="#Observable-和一般化的函数进行比较" class="headerlink" title="Observable 和一般化的函数进行比较"></a>Observable 和一般化的函数进行比较</h2><p>和普遍声称的不同，Observables 既不像EventEmitters 也不像多值的Promise。Observables可能在某些情况下像EventEmitters,即当他们使用RxJS Subjects 来广播时，但是通常Observables和EventEmitters不同。</p>
+<blockquote>
+<p>Observables 就像是没有参数的函数，但是包括了那些允许多个值的函数</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">  console.log(&#39;Hello&#39;);</span><br><span class="line">  return 42;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var x &#x3D; foo.call(); &#x2F;&#x2F; same as foo()</span><br><span class="line">console.log(x);</span><br><span class="line">var y &#x3D; foo.call(); &#x2F;&#x2F; same as foo()</span><br><span class="line">console.log(y);</span><br></pre></td></tr></table></figure>
+<p>通过RxJS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var foo &#x3D; Rx.Observable.create(function(observer)&#123;</span><br><span class="line">    console.log(&#39;Hello&#39;);</span><br><span class="line">    observer.next(42);</span><br><span class="line">&#125;);</span><br><span class="line">foo.subscribe(function(x)&#123;</span><br><span class="line">    console.log(x);</span><br><span class="line">&#125;);</span><br><span class="line">foo.subcribe(function(y)&#123;</span><br><span class="line">    console.log(y);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这两个的输出都是一样的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;Hello&quot;</span><br><span class="line">&quot;42&quot;</span><br><span class="line">&quot;Hello&quot;</span><br><span class="line">&quot;42&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>向一个Observable进行订阅就像是调用一个一般的函数</p>
+</blockquote>
+<blockquote>
+<p>Observables能够既能同步又能异步传递数据</p>
+</blockquote>
+<p>Observable可以 “return” 多个值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var foo &#x3D; Rx.Observable.create(function(observer)&#123;</span><br><span class="line">    console.log(&#39;Hello&#39;);</span><br><span class="line">    observer.next(42);</span><br><span class="line">    observer.next(100);</span><br><span class="line">    observer.next(200);</span><br><span class="line">&#125;);</span><br><span class="line">console.log(&#39;before&#39;);</span><br><span class="line">foo.subscribe(function(x)&#123;</span><br><span class="line">    console.log(x);</span><br><span class="line">&#125;);</span><br><span class="line">console.log(&#39;after&#39;);</span><br></pre></td></tr></table></figure>
+<p>可以输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;before&quot;</span><br><span class="line">&quot;Hello&quot;</span><br><span class="line">42</span><br><span class="line">100</span><br><span class="line">200</span><br><span class="line">&quot;after&quot;</span><br></pre></td></tr></table></figure>
+<p>总结</p>
+<ul>
+<li>func.call() 意味着 “给我一个同步的值”</li>
+<li>observable.subscribe() 意味着“给我多个值不管是同步还是异步”</li>
+</ul>
+<h2 id="Observable的解析"><a href="#Observable的解析" class="headerlink" title="Observable的解析"></a>Observable的解析</h2><p>Observable 通过Rx.Observable.create来<strong>创建</strong>，通过Observer来<strong>订阅</strong>，<strong>执行</strong>来传递next/error/complete来通知观察者，而且这些执行操作可以取消，这就是一个Observable实例的4个方面。</p>
+<h3 id="创建Observables"><a href="#创建Observables" class="headerlink" title="创建Observables"></a>创建Observables</h3><p>Rx.Observable.create 是Observable构造器的别名，它有一个参数就是subscribe函数<br>下面这个例子每隔1s产生一个’hi’给Observer，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var observable &#x3D; Rx.Observable.create(function subscribe(observer)&#123;</span><br><span class="line">    var id &#x3D; setInterval(() &#x3D;&gt; &#123;</span><br><span class="line">        observer.next(&#39;hi&#39;);</span><br><span class="line">    &#125;,1000)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="订阅Observables"><a href="#订阅Observables" class="headerlink" title="订阅Observables"></a>订阅Observables</h3><p>上个例子中的observable可以这样订阅 <code>observable.subscribe(x =&gt; console.log(x));</code></p>
+<h3 id="执行Observables"><a href="#执行Observables" class="headerlink" title="执行Observables"></a>执行Observables</h3><h3 id="处理Observable的执行"><a href="#处理Observable的执行" class="headerlink" title="处理Observable的执行"></a>处理Observable的执行</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxJS/" rel="tag"># RxJS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/18/c-1-compile/" rel="prev" title="C++编译过程">
+                C++编译过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lyuke" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:jacklvke@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RxJS-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">RxJS 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-number">1.1.</span> <span class="nav-text">第一个例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%AF%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">纯函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E6%B5%81"><span class="nav-number">1.1.2.</span> <span class="nav-text">事件流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E5%BC%8F%E4%BC%A0%E5%80%BC"><span class="nav-number">1.1.3.</span> <span class="nav-text">流式传值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Observable"><span class="nav-number">2.</span> <span class="nav-text">Observable</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pull-vs-Push"><span class="nav-number">2.1.</span> <span class="nav-text">Pull vs Push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observable-%E5%92%8C%E4%B8%80%E8%88%AC%E5%8C%96%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83"><span class="nav-number">2.2.</span> <span class="nav-text">Observable 和一般化的函数进行比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observable%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text">Observable的解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAObservables"><span class="nav-number">2.3.1.</span> <span class="nav-text">创建Observables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A2%E9%98%85Observables"><span class="nav-number">2.3.2.</span> <span class="nav-text">订阅Observables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8CObservables"><span class="nav-number">2.3.3.</span> <span class="nav-text">执行Observables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86Observable%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">2.3.4.</span> <span class="nav-text">处理Observable的执行</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Loker</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
